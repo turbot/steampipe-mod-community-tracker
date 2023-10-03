@@ -88,7 +88,7 @@ control "steampipe_core_repository_license_is_correct" {
         else 'alarm'
       end as status,
       name_with_owner || case
-        when name_with_owner = 'turbot/steampipe-docs' then ' license check skipped.'
+        when name_with_owner = 'turbot/steampipe-docs' then ' license check skipped'
         else ' license is ' || coalesce(((license_info -> 'spdx_id')::text), 'not set')
       end || '.' as reason,
       name_with_owner
@@ -227,7 +227,7 @@ control "steampipe_core_repository_language_is_go" {
         else 'alarm'
       end as status,
       name_with_owner || case
-        when name_with_owner = 'turbot/steampipe-docs' then ' language check skipped.'
+        when name_with_owner = 'turbot/steampipe-docs' then ' language check skipped'
         else ' language is ' || coalesce(((primary_language ->> 'name')::text), 'not set')
       end || '.' as reason,
       name_with_owner
