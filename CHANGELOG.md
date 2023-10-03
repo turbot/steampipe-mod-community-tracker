@@ -1,3 +1,14 @@
+## v0.2 [2023-10-03]
+
+_Breaking changes_
+
+- Removed unnecessary `steampipe_repository_checks` benchmark.
+
+_Bug fixes_
+
+- Fixed title for `steampipe_plugin_repository_checks` benchmark.
+- Tidied various reasons for skip reasons in `steampipe_core_repository_checks` benchmark controls.
+
 ## v0.1 [2023-09-29]
 
 _What's new?_
