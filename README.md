@@ -74,6 +74,13 @@ Different output formats are also available, for more information please see
 
 This mod uses the credentials configured in the [Steampipe GitHub plugin](https://hub.steampipe.io/plugins/turbot/github).
 
+Permissions: You must create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and assign the following scopes:
+  - repo (all)
+  - read:org
+  - gist
+  - read:user
+  - user:email
+
 Note: Some benchmarks require organization and repository admin access. If your GitHub user doesn't have this access, some controls will return incorrect results.
 
 ### Configuration
