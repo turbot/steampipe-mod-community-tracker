@@ -1,3 +1,9 @@
+## v0.3 [2024-01-09]
+
+_Enhancements_
+
+- Updated the credential section of the doc to include the requisite github token permissions. ([#2](https://github.com/turbot/steampipe-mod-community-tracker/pull/2))
+
 ## v0.2 [2023-10-03]
 
 _Breaking changes_
