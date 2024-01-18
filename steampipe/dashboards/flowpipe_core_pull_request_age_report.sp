@@ -64,8 +64,8 @@ query "flowpipe_core_total_days_pull_request_count" {
     from
       github_search_pull_request
     where
-      query = '${local.dashboard_pull_request_search_query}'
-      and (repository_full_name ~ 'turbot/flowpipe-(docs|fdw|plugin-sdk)' or repository_full_name = 'turbot/flowpipe')
+      query = '${local.dashboard_flowpipe_pull_request_search_query}'
+      and repository_full_name = 'turbot/flowpipe')
       and author ->> 'login' not in (
         select
           m.login as member_login
@@ -121,35 +121,7 @@ query "flowpipe_sdk_external_pull_request_count" {
       github_search_pull_request
     where
       query = '${local.dashboard_pull_request_search_query}'
-      and repository_full_name = 'turbot/flowpipe-plugin-sdk'
-      and author ->> 'login' not in (
-        select
-          m.login as member_login
-        from
-          github_organization_member m
-        where
-          m.organization = 'turbot'
-       );
-    EOQ
-}
-
-query "flowpipe_fdw_external_pull_request_count" {
-  sql = <<-EOQ
-    select
-      'FDW' as label,
-      case
-        when sum(now()::date - created_at::date) is null then '0 days'
-        else sum(now()::date - created_at::date) || ' days'
-      end as value,
-      case
-        when sum(now()::date - created_at::date) > 30 then 'alert'
-        else 'ok'
-      end as type
-    from
-      github_search_pull_request
-    where
-      query = '${local.dashboard_pull_request_search_query}'
-      and repository_full_name = 'turbot/flowpipe-fdw'
+      and repository_full_name = 'turbot/flowpipe-sdk-go'
       and author ->> 'login' not in (
         select
           m.login as member_login
@@ -202,7 +174,7 @@ query "flowpipe_core_pull_request_table" {
       github_search_pull_request
     where
       query = '${local.dashboard_pull_request_search_query}'
-      and (repository_full_name ~ 'turbot/flowpipe-(docs|fdw|plugin-sdk)' or repository_full_name = 'turbot/flowpipe')
+      and repository_full_name = 'turbot/flowpipe')
       and author ->> 'login' not in (
         select
           m.login as member_login

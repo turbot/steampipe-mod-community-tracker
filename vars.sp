@@ -27,6 +27,7 @@ locals {
   benchmark_flowpipe_core_search_query = "repo:turbot/flowpipe repo:turbot/flowpipe-sdk-go repo:turbot/flowpipe-docs repo:turbot/pipe-fittings is:public archived:false"
 
   benchmark_flowpipe_mod_search_query   = "in:name flowpipe-mod- is:public archived:false org:turbot"
+  dashboard_flowpipe_pull_request_search_query = "org:turbot repo:turbot/flowpipe is:open is:public archived:false"
   dashboard_flowpipe_issue_search_query = "org:turbot repo:turbot/flowpipe is:open is:public archived:false"
 }
 
