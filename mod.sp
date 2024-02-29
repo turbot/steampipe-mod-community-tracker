@@ -6,7 +6,7 @@ mod "community_tracker" {
 
   require {
     plugin "github" {
-      version = "0.34.1"
+      min_version = "0.34.1"
     }
   }
 }
