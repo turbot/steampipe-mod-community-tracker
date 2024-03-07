@@ -1,8 +1,8 @@
-dashboard "steampipe_mod_issue_age_report" {
+dashboard "flowpipe_mod_pull_request_age_report" {
 
-  title = "Steampipe Mod Issue Age Report"
+  title = "Flowpipe Mod Pull Request Age Report"
 
-  tags = merge(local.github_issue_common_tags, {
+  tags = merge(local.github_pull_request_common_tags, {
     type = "Report"
   })
 
@@ -10,23 +10,23 @@ dashboard "steampipe_mod_issue_age_report" {
 
     # Analysis
     card {
-      sql   = query.steampipe_aws_compliance_mod_issue_external_count.sql
+      sql   = query.flowpipe_aws_mod_pull_request_external_count.sql
       width = 2
     }
 
     card {
-      sql   = query.steampipe_mod_issue_total_days_count.sql
+      sql   = query.flowpipe_mod_pull_request_total_days_count.sql
       width = 2
     }
 
     table {
-      sql = query.steampipe_mod_issue_table.sql
+      sql = query.flowpipe_mod_pull_request_table.sql
 
       column "url" {
         display = "none"
       }
 
-      column "Issue" {
+      column "Pull Request" {
         href = "{{.'url'}}"
       }
     }
@@ -35,7 +35,7 @@ dashboard "steampipe_mod_issue_age_report" {
 
 }
 
-query "steampipe_aws_compliance_mod_issue_external_count" {
+query "flowpipe_aws_mod_pull_request_external_count" {
   sql = <<-EOQ
     select
       'AWS Compliance' as label,
@@ -48,10 +48,10 @@ query "steampipe_aws_compliance_mod_issue_external_count" {
         else 'ok'
       end as type
     from
-      github_search_issue
+      github_search_pull_request
     where
-      query = '${local.dashboard_issue_search_query}'
-      and repository_full_name = 'turbot/steampipe-mod-aws-compliance'
+      query = '${local.dashboard_pull_request_search_query}'
+      and repository_full_name = 'turbot/flowpipe-mod-aws-compliance'
       and author ->> 'login' not in (
         select
           m.login as member_login
@@ -63,7 +63,7 @@ query "steampipe_aws_compliance_mod_issue_external_count" {
     EOQ
 }
 
-query "steampipe_mod_issue_total_days_count" {
+query "flowpipe_mod_pull_request_total_days_count" {
   sql = <<-EOQ
     select
       'Total' as label,
@@ -76,10 +76,10 @@ query "steampipe_mod_issue_total_days_count" {
         else 'ok'
       end as type
     from
-      github_search_issue
+      github_search_pull_request
     where
-      query = '${local.dashboard_issue_search_query}'
-      and repository_full_name like 'turbot/steampipe-mod-%'
+      query = '${local.dashboard_pull_request_search_query}'
+      and repository_full_name like 'turbot/flowpipe-mod-%'
       and author ->> 'login' not in (
         select
           m.login as member_login
@@ -91,20 +91,20 @@ query "steampipe_mod_issue_total_days_count" {
     EOQ
 }
 
-query "steampipe_mod_issue_table" {
+query "flowpipe_mod_pull_request_table" {
   sql = <<-EOQ
     select
       repository_full_name as "Repository",
-      title as "Issue",
+      title as "Pull Request",
       now()::date - created_at::date as "Age in Days",
       now()::date - updated_at::date as "Last Updated (Days)",
       author ->> 'login' as "Author",
       url
     from
-      github_search_issue
+      github_search_pull_request
     where
-      query = '${local.dashboard_issue_search_query}'
-      and repository_full_name like 'turbot/steampipe-mod-%'
+      query = '${local.dashboard_pull_request_search_query}'
+      and repository_full_name like 'turbot/flowpipe-mod-%'
       and author ->> 'login' not in (
         select
           m.login as member_login
@@ -117,3 +117,4 @@ query "steampipe_mod_issue_table" {
       "Age in Days" desc;
   EOQ
 }
+

@@ -13,6 +13,7 @@ dashboard "steampipe_core_issue_age_report" {
       sql   = query.steampipe_cli_external_issue_count.sql
       width = 2
     }
+
     card {
       sql   = query.steampipe_sdk_external_issue_count.sql
       width = 2

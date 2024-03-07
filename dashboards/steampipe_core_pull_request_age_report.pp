@@ -13,6 +13,7 @@ dashboard "steampipe_core_pull_request_age_report" {
       sql   = query.steampipe_cli_external_pull_request_count.sql
       width = 2
     }
+
     card {
       sql   = query.steampipe_sdk_external_pull_request_count.sql
       width = 2
