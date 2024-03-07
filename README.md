@@ -1,4 +1,4 @@
-# Community Tracker Mod for Steampipe
+# Community Tracker Mod for Powerpipe
 
 A collection of benchmarks, controls, and dashboards used to track organization settings, repository settings, open issues and pull requests, and more.
 
@@ -10,79 +10,79 @@ Dashboards and benchmarks can help answer questions like:
 - What's my age trend data?
 - Which organizations and repositories aren't configured correctly?
 
-## Getting started
+## Getting Started
 
 ### Installation
 
-Download and install Steampipe (https://steampipe.io/downloads). Or use Brew:
+Install Powerpipe (https://powerpipe.io/downloads), or use Brew:
 
 ```sh
-brew tap turbot/tap
-brew install steampipe
+brew install turbot/tap/powerpipe
 ```
 
-Install the GitHub plugin with [Steampipe](https://steampipe.io):
+This mod also requires [Steampipe](https://steampipe.io) with the [Github plugin](https://hub.steampipe.io/plugins/turbot/github) as the data source. Install Steampipe (https://steampipe.io/downloads), or use Brew:
 
 ```sh
+brew install turbot/tap/steampipe
 steampipe plugin install github
 ```
 
-Clone:
+Finally, install the mod:
 
 ```sh
-git clone http://github.com/turbot/steampipe-mod-community-tracker.git
-cd steampipe-mod-community-tracker
+mkdir dashboards
+cd dashboards
+powerpipe mod init
+powerpipe mod install github.com/turbot/steampipe-mod-community-tracker
 ```
 
-### Usage
+### Browsing Dashboards
 
-Start your dashboard server to get started:
+Start Steampipe as the data source:
 
 ```sh
-steampipe dashboard
+steampipe service start
 ```
 
-By default, the dashboard interface will then be launched in a new browser
-window at https://localhost:9194. From here, you can run benchmarks by
-selecting one or searching for a specific one.
+Start the dashboard server:
+
+```sh
+powerpipe server
+```
+
+Browse and view your dashboards at **http://localhost:9033**.
+
+### Running Checks in Your Terminal
 
 Instead of running benchmarks in a dashboard, you can also run them within your
-terminal with the `steampipe check` command:
+terminal with the `powerpipe benchmark` command:
 
-Run all controls:
+List available benchmarks:
 
 ```sh
-steampipe check all
+powerpipe benchmark list
 ```
 
-Run a single benchmark:
+Run a benchmark:
 
 ```sh
-steampipe check benchmark.repository_steampipe_plugin_checks
-```
-
-Run a specific control:
-
-```sh
-steampipe check control.repository_steampipe_plugin_standard_description_is_set
+powerpipe benchmark run community_tracker.steampipe_plugin_repository_checks
 ```
 
 Different output formats are also available, for more information please see
-[Output Formats](https://steampipe.io/docs/reference/cli/check#output-formats).
+[Output Formats](https://powerpipe.io/docs/reference/cli/benchmark#output-formats).
 
-### Credentials
+## Open Source & Contributing
 
-This mod uses the credentials configured in the [Steampipe GitHub plugin](https://hub.steampipe.io/plugins/turbot/github).
+This repository is published under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0). Please see our [code of conduct](https://github.com/turbot/.github/blob/main/CODE_OF_CONDUCT.md). We look forward to collaborating with you!
 
-Permissions: You must create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and assign the following scopes:
-  - repo (all)
-  - read:org
-  - gist
-  - read:user
-  - user:email
+[Steampipe](https://steampipe.io) and [Powerpipe](https://powerpipe.io) are products produced from this open source software, exclusively by [Turbot HQ, Inc](https://turbot.com). They are distributed under our commercial terms. Others are allowed to make their own distribution of the software, but cannot use any of the Turbot trademarks, cloud services, etc. You can learn more in our [Open Source FAQ](https://turbot.com/open-source).
 
-Note: Some benchmarks require organization and repository admin access. If your GitHub user doesn't have this access, some controls will return incorrect results.
+## Get Involved
 
-### Configuration
+**[Join #powerpipe on Slack →](https://turbot.com/community/join)**
 
-No extra configuration is required.
+Want to help but don't know where to start? Pick up one of the `help wanted` issues:
+
+- [Powerpipe](https://github.com/turbot/powerpipe/labels/help%20wanted)
+- [Community Tracker Mod](https://github.com/turbot/steampipe-mod-community-tracker/labels/help%20wanted)
