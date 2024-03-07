@@ -1,17 +1,17 @@
-benchmark "steampipe_mod_repository_checks" {
-  title = "Steampipe Mod Repository Checks"
+benchmark "powerpipe_mod_repository_checks" {
+  title = "Powerpipe Mod Repository Checks"
   children = [
-    control.steampipe_mod_repository_has_mandatory_topics,
-    control.steampipe_mod_repository_default_branch_protection_enabled,
-    control.steampipe_mod_repository_delete_branch_on_merge_enabled,
-    control.steampipe_mod_repository_description_is_set,
-    control.steampipe_mod_repository_homepage_links_to_hub,
-    control.steampipe_mod_repository_language_is_hcl,
-    control.steampipe_mod_repository_license_is_apache,
-    control.steampipe_mod_repository_merge_commit_squash_merge_allowed,
-    control.steampipe_mod_repository_projects_disabled,
-    control.steampipe_mod_repository_vulnerability_alerts_enabled,
-    control.steampipe_mod_repository_wiki_disabled,
+    control.powerpipe_mod_repository_has_mandatory_topics,
+    control.powerpipe_mod_repository_default_branch_protection_enabled,
+    control.powerpipe_mod_repository_delete_branch_on_merge_enabled,
+    control.powerpipe_mod_repository_description_is_set,
+    control.powerpipe_mod_repository_homepage_links_to_hub,
+    control.powerpipe_mod_repository_language_is_hcl,
+    control.powerpipe_mod_repository_license_is_apache,
+    control.powerpipe_mod_repository_merge_commit_squash_merge_allowed,
+    control.powerpipe_mod_repository_projects_disabled,
+    control.powerpipe_mod_repository_vulnerability_alerts_enabled,
+    control.powerpipe_mod_repository_wiki_disabled,
   ]
 
   tags = merge(local.github_repository_common_tags, {
@@ -20,8 +20,8 @@ benchmark "steampipe_mod_repository_checks" {
 }
 
 # This control is only reliable for Turbot repos
-control "steampipe_mod_repository_delete_branch_on_merge_enabled" {
-  title = "Steampipe mod repositories delete branch on merge enabled"
+control "powerpipe_mod_repository_delete_branch_on_merge_enabled" {
+  title = "Powerpipe mod repositories delete branch on merge enabled"
   sql = <<-EOT
     select
       url as resource,
@@ -37,15 +37,15 @@ control "steampipe_mod_repository_delete_branch_on_merge_enabled" {
     from
       github_search_repository
     where
-      query = '${local.steampipe_mod_turbot_benchmark_search_query}'
+      query = '${local.powerpipe_mod_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
 # This control is only reliable for Turbot repos
-control "steampipe_mod_repository_default_branch_protection_enabled" {
-  title = "Steampipe mod repositories default branch protection is enabled"
+control "powerpipe_mod_repository_default_branch_protection_enabled" {
+  title = "Powerpipe mod repositories default branch protection is enabled"
   sql = <<-EOT
     select
       url as resource,
@@ -61,19 +61,19 @@ control "steampipe_mod_repository_default_branch_protection_enabled" {
     from
       github_search_repository
     where
-      query = '${local.steampipe_mod_turbot_benchmark_search_query}'
+      query = '${local.powerpipe_mod_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_mod_repository_description_is_set" {
-  title = "Steampipe mod repositories have a description"
+control "powerpipe_mod_repository_description_is_set" {
+  title = "Powerpipe mod repositories have a description"
   sql = <<-EOT
     select
       url as resource,
       case
-        when description is not null then 'ok'
+        when description like 'Visualize%.' then 'ok'
         else 'alarm'
       end as status,
       name_with_owner || case
@@ -84,14 +84,14 @@ control "steampipe_mod_repository_description_is_set" {
     from
       github_search_repository
     where
-      query = '${local.steampipe_mod_all_benchmark_search_query}'
+      query = '${local.powerpipe_mod_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_mod_repository_homepage_links_to_hub" {
-  title = "Steampipe mod repositories homepage links to the Hub"
+control "powerpipe_mod_repository_homepage_links_to_hub" {
+  title = "Powerpipe mod repositories homepage links to the Hub"
   sql = <<-EOT
     select
       url as resource,
@@ -107,14 +107,14 @@ control "steampipe_mod_repository_homepage_links_to_hub" {
     from
       github_search_repository
     where
-      query = '${local.steampipe_mod_all_benchmark_search_query}'
+      query = '${local.powerpipe_mod_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_mod_repository_wiki_disabled" {
-  title = "Steampipe mod repositories wiki is disabled"
+control "powerpipe_mod_repository_wiki_disabled" {
+  title = "Powerpipe mod repositories wiki is disabled"
   sql = <<-EOT
     select
       url as resource,
@@ -130,14 +130,14 @@ control "steampipe_mod_repository_wiki_disabled" {
     from
       github_search_repository
     where
-      query = '${local.steampipe_mod_all_benchmark_search_query}'
+      query = '${local.powerpipe_mod_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_mod_repository_projects_disabled" {
-  title = "Steampipe mod repositories projects are disabled"
+control "powerpipe_mod_repository_projects_disabled" {
+  title = "Powerpipe mod repositories projects are disabled"
   sql = <<-EOT
     select
       url as resource,
@@ -153,14 +153,14 @@ control "steampipe_mod_repository_projects_disabled" {
     from
       github_search_repository
     where
-      query = '${local.steampipe_mod_all_benchmark_search_query}'
+      query = '${local.powerpipe_mod_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_mod_repository_language_is_hcl" {
-  title = "Steampipe mod repositories language is HCL"
+control "powerpipe_mod_repository_language_is_hcl" {
+  title = "Powerpipe mod repositories language is HCL"
   sql = <<-EOT
     select
       url as resource,
@@ -173,15 +173,15 @@ control "steampipe_mod_repository_language_is_hcl" {
     from
       github_search_repository
     where
-      query ='${local.steampipe_mod_all_benchmark_search_query}'
+      query ='${local.powerpipe_mod_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
 # This control is only reliable for Turbot repos
-control "steampipe_mod_repository_merge_commit_squash_merge_allowed" {
-  title = "Steampipe mod repositories allow merge commits and squash merging"
+control "powerpipe_mod_repository_merge_commit_squash_merge_allowed" {
+  title = "Powerpipe mod repositories allow merge commits and squash merging"
   sql = <<-EOT
     select
       url as resource,
@@ -197,14 +197,14 @@ control "steampipe_mod_repository_merge_commit_squash_merge_allowed" {
     from
       github_search_repository
     where
-      query = '${local.steampipe_mod_turbot_benchmark_search_query}'
+      query = '${local.powerpipe_mod_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_mod_repository_license_is_apache" {
-  title = "Steampipe mod repositories license is Apache 2.0"
+control "powerpipe_mod_repository_license_is_apache" {
+  title = "Powerpipe mod repositories license is Apache 2.0"
   sql = <<-EOT
     select
       url as resource,
@@ -217,15 +217,15 @@ control "steampipe_mod_repository_license_is_apache" {
     from
       github_search_repository
     where
-      query ='${local.steampipe_mod_all_benchmark_search_query}'
+      query ='${local.powerpipe_mod_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
 # This control is only reliable for Turbot repos
-control "steampipe_mod_repository_vulnerability_alerts_enabled" {
-  title = "Steampipe mod repositories vulnerability alerts are enabled"
+control "powerpipe_mod_repository_vulnerability_alerts_enabled" {
+  title = "Powerpipe mod repositories vulnerability alerts are enabled"
   sql = <<-EOT
     select
       url as resource,
@@ -241,17 +241,17 @@ control "steampipe_mod_repository_vulnerability_alerts_enabled" {
     from
       github_search_repository
     where
-      query ='${local.steampipe_mod_turbot_benchmark_search_query}'
+      query ='${local.powerpipe_mod_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_mod_repository_has_mandatory_topics" {
-  title = "Steampipe mod repositories have mandatory topics"
+control "powerpipe_mod_repository_has_mandatory_topics" {
+  title = "Powerpipe mod repositories have mandatory topics"
   sql = <<-EOT
     with input as (
-      select array['powerpipe', 'powerpipe-mod', 'sql', 'steampipe', 'steampipe-mod'] as mandatory_topics
+      select array['dashboard', 'sql', 'powerpipe', 'powerpipe-mod'] as mandatory_topics
     ),
     analysis as (
       select
@@ -263,7 +263,7 @@ control "steampipe_mod_repository_has_mandatory_topics" {
         github_search_repository,
         input
       where
-        query ='${local.steampipe_mod_all_benchmark_search_query}'
+        query ='${local.powerpipe_mod_all_benchmark_search_query}'
     )
     select
       url as resource,

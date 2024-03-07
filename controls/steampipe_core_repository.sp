@@ -1,15 +1,15 @@
-benchmark "steampipe_core_repository_checks" {
-  title = "Steampipe Core Repository Checks"
+benchmark "pipeling_core_repository_checks" {
+  title = "Pipeling Core Repository Checks"
   children = [
-    control.steampipe_core_repository_default_branch_protection_enabled,
-    control.steampipe_core_repository_delete_branch_on_merge_enabled,
-    control.steampipe_core_repository_description_is_set,
-    control.steampipe_core_repository_language_is_go,
-    control.steampipe_core_repository_license_is_correct,
-    control.steampipe_core_repository_projects_disabled,
-    control.steampipe_core_repository_squash_merge_allowed,
-    control.steampipe_core_repository_vulnerability_alerts_enabled,
-    control.steampipe_core_repository_wiki_disabled,
+    control.pipeling_core_repository_default_branch_protection_enabled,
+    control.pipeling_core_repository_delete_branch_on_merge_enabled,
+    control.pipeling_core_repository_description_is_set,
+    control.pipeling_core_repository_language_is_correct,
+    control.pipeling_core_repository_license_is_correct,
+    control.pipeling_core_repository_projects_disabled,
+    control.pipeling_core_repository_squash_merge_allowed,
+    control.pipeling_core_repository_vulnerability_alerts_enabled,
+    control.pipeling_core_repository_wiki_disabled,
   ]
 
   tags = merge(local.github_repository_common_tags, {
@@ -17,8 +17,8 @@ benchmark "steampipe_core_repository_checks" {
   })
 }
 
-control "steampipe_core_repository_description_is_set" {
-  title = "Steampipe core repositories have a description"
+control "pipeling_core_repository_description_is_set" {
+  title = "Pipeling core repositories have a description"
   sql = <<-EOT
     select
       url as resource,
@@ -34,17 +34,17 @@ control "steampipe_core_repository_description_is_set" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_has_mandatory_topics" {
-  title = "Steampipe core repositories have mandatory topics"
+control "pipeling_core_repository_has_mandatory_topics" {
+  title = "Pipeling core repositories have mandatory topics"
   sql = <<-EOT
     with input as (
-      select array['sql', 'steampipe', 'postgresql', 'postgresql-fdw'] as mandatory_topics
+      select array['sql', 'pipeling', 'postgresql', 'postgresql-fdw'] as mandatory_topics
     ),
     analysis as (
       select
@@ -56,7 +56,7 @@ control "steampipe_core_repository_has_mandatory_topics" {
         github_search_repository,
         input
       where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     )
     select
       url as resource,
@@ -76,33 +76,31 @@ control "steampipe_core_repository_has_mandatory_topics" {
   EOT
 }
 
-control "steampipe_core_repository_license_is_correct" {
-  title = "Steampipe core repositories use correct license"
+control "pipeling_core_repository_license_is_correct" {
+  title = "Pipeling core repositories use correct license"
   sql = <<-EOT
     select
       url as resource,
       case
-        when name_with_owner = 'turbot/steampipe-docs' then 'skip'
-        when name_with_owner in ('turbot/steampipe', 'turbot/steampipe-postgres-fdw') and license_info ->> 'spdx_id' = 'AGPL-3.0' then 'ok'
-        when name_with_owner = 'turbot/steampipe-plugin-sdk' and license_info ->> 'spdx_id' = 'Apache-2.0' then 'ok'
+        -- The docs repos use CC-BY-NC-SA 4.0 which is not recognized by GitHub
+        when name_with_owner like 'turbot/%-docs' and license_info  ->> 'spdx_id' = 'NOASSERTION' then 'ok'
+        when name_with_owner in ('turbot/flowpipe', 'turbot/pipe-fittings', 'turbot/powerpipe', 'turbot/steampipe') and license_info ->> 'spdx_id' = 'AGPL-3.0' then 'ok'
+        when name_with_owner in ('turbot/steampipe-plugin-sdk', 'turbot/steampipe-postgres-fdw') and license_info ->> 'spdx_id' = 'Apache-2.0' then 'ok'
         else 'alarm'
       end as status,
-      name_with_owner || case
-        when name_with_owner = 'turbot/steampipe-docs' then ' license check skipped'
-        else ' license is ' || coalesce(((license_info -> 'spdx_id')::text), 'not set')
-      end || '.' as reason,
+      name_with_owner || ' license is ' || coalesce(((license_info -> 'spdx_id')::text), 'not set') || '.' as reason,
       name_with_owner
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_vulnerability_alerts_enabled" {
-  title = "Steampipe core repositories have vulnerability alerts enabled"
+control "pipeling_core_repository_vulnerability_alerts_enabled" {
+  title = "Pipeling core repositories have vulnerability alerts enabled"
   sql = <<-EOT
     select
       url as resource,
@@ -118,14 +116,14 @@ control "steampipe_core_repository_vulnerability_alerts_enabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_delete_branch_on_merge_enabled" {
-  title = "Steampipe core repositories have delete branch on merge enabled"
+control "pipeling_core_repository_delete_branch_on_merge_enabled" {
+  title = "Pipeling core repositories have delete branch on merge enabled"
   sql = <<-EOT
     select
       url as resource,
@@ -141,14 +139,14 @@ control "steampipe_core_repository_delete_branch_on_merge_enabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_default_branch_protection_enabled" {
-  title = "Steampipe core repositories have default branch protection enabled"
+control "pipeling_core_repository_default_branch_protection_enabled" {
+  title = "Pipeling core repositories have default branch protection enabled"
   sql = <<-EOT
     select
       url as resource,
@@ -164,14 +162,14 @@ control "steampipe_core_repository_default_branch_protection_enabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_wiki_disabled" {
-  title = "Steampipe core repositories have wiki disabled"
+control "pipeling_core_repository_wiki_disabled" {
+  title = "Pipeling core repositories have wiki disabled"
   sql = <<-EOT
     select
       url as resource,
@@ -187,14 +185,14 @@ control "steampipe_core_repository_wiki_disabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_projects_disabled" {
-  title = "Steampipe core repositories have projects disabled"
+control "pipeling_core_repository_projects_disabled" {
+  title = "Pipeling core repositories have projects disabled"
   sql = <<-EOT
     select
       url as resource,
@@ -210,38 +208,39 @@ control "steampipe_core_repository_projects_disabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_language_is_go" {
-  title = "Steampipe core repositories have language set to Go"
+control "pipeling_core_repository_language_is_correct" {
+  title = "Pipeling core repositories have language set correctly"
   sql = <<-EOT
     select
       url as resource,
       case
-        when name_with_owner = 'turbot/steampipe-docs' then 'skip'
+        when name_with_owner like 'turbot/%-docs' then 'skip'
+        when name_with_owner = 'turbot/powerpipe' and primary_language ->> 'name' = 'TypeScript' then 'ok'
         when primary_language ->> 'name' = 'Go' then 'ok'
         else 'alarm'
       end as status,
       name_with_owner || case
-        when name_with_owner = 'turbot/steampipe-docs' then ' language check skipped'
+        when name_with_owner like 'turbot/%-docs' then ' language check skipped'
         else ' language is ' || coalesce(((primary_language ->> 'name')::text), 'not set')
       end || '.' as reason,
       name_with_owner
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT
 }
 
-control "steampipe_core_repository_squash_merge_allowed" {
-  title = "Steampipe core repositories allow squash merging"
+control "pipeling_core_repository_squash_merge_allowed" {
+  title = "Pipeling core repositories allow squash merging"
   sql = <<-EOT
     select
       url as resource,
@@ -257,7 +256,7 @@ control "steampipe_core_repository_squash_merge_allowed" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_steampipe_core_search_query}'
+      query = '${local.pipeling_core_benchmark_search_query}'
     order by
       name_with_owner
   EOT

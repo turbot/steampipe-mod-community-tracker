@@ -36,7 +36,7 @@ control "steampipe_plugin_repository_standard_description_is_set" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_turbot_plugin_search_query}'
+      query = '${local.steampipe_plugin_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -58,7 +58,7 @@ control "steampipe_plugin_repository_has_mandatory_topics" {
         github_search_repository,
         input
       where
-        query ='${local.benchmark_all_plugin_search_query}'
+        query ='${local.steampipe_plugin_all_benchmark_search_query}'
     )
     select
       url as resource,
@@ -92,7 +92,7 @@ control "steampipe_plugin_repository_license_is_apache" {
     from
       github_search_repository
     where
-      query ='${local.benchmark_all_plugin_search_query}'
+      query ='${local.steampipe_plugin_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -116,7 +116,7 @@ control "steampipe_plugin_repository_vulnerability_alerts_enabled" {
     from
       github_search_repository
     where
-      query ='${local.benchmark_turbot_plugin_search_query}'
+      query ='${local.steampipe_plugin_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -140,7 +140,7 @@ control "steampipe_plugin_repository_delete_branch_on_merge_enabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_turbot_plugin_search_query}'
+      query = '${local.steampipe_plugin_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -164,7 +164,7 @@ control "steampipe_plugin_repository_default_branch_protection_enabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_turbot_plugin_search_query}'
+      query = '${local.steampipe_plugin_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -187,7 +187,7 @@ control "steampipe_plugin_repository_homepage_links_to_hub" {
     from
       github_search_repository
     where
-      query ='${local.benchmark_all_plugin_search_query}'
+      query ='${local.steampipe_plugin_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -210,7 +210,7 @@ control "steampipe_plugin_repository_wiki_disabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_turbot_plugin_search_query}'
+      query = '${local.steampipe_plugin_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -233,7 +233,7 @@ control "steampipe_plugin_repository_projects_disabled" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_turbot_plugin_search_query}'
+      query = '${local.steampipe_plugin_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -253,7 +253,7 @@ control "steampipe_plugin_repository_language_is_go" {
     from
       github_search_repository
     where
-      query ='${local.benchmark_all_plugin_search_query}'
+      query ='${local.steampipe_plugin_all_benchmark_search_query}'
     order by
       name_with_owner
   EOT
@@ -277,7 +277,7 @@ control "steampipe_plugin_repository_squash_merge_allowed" {
     from
       github_search_repository
     where
-      query = '${local.benchmark_turbot_plugin_search_query}'
+      query = '${local.steampipe_plugin_turbot_benchmark_search_query}'
     order by
       name_with_owner
   EOT

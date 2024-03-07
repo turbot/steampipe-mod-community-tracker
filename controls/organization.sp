@@ -36,7 +36,7 @@ control "organization_two_factor_authentication_required" {
     from
       github_my_organization
     where
-      login in ${local.benchmark_all_organizations};
+      login in ${local.organization_all_benchmark};
   EOT
 }
 
@@ -57,7 +57,7 @@ control "organization_email_set" {
     from
       github_my_organization
     where
-      login in ${local.benchmark_all_organizations};
+      login in ${local.organization_all_benchmark};
   EOT
 }
 
@@ -77,7 +77,7 @@ control "organization_description_set" {
     from
       github_my_organization
     where
-      login in ${local.benchmark_all_organizations};
+      login in ${local.organization_all_benchmark};
   EOT
 }
 
@@ -97,7 +97,7 @@ control "organization_profile_pic_set" {
     from
       github_my_organization
     where
-      login in ${local.benchmark_all_organizations};
+      login in ${local.organization_all_benchmark};
   EOT
 }
 
@@ -117,7 +117,7 @@ control "organization_profile_pic_set" {
     from
       github_my_organization
     where
-      login in ${local.benchmark_all_organizations};
+      login in ${local.organization_all_benchmark};
   EOT
 }
 
@@ -137,7 +137,7 @@ control "organization_domains_verified" {
     from
       github_my_organization
     where
-      login in ${local.benchmark_all_organizations};
+      login in ${local.organization_all_benchmark};
   EOT
 }
 
@@ -158,6 +158,6 @@ control "organization_homepage_set" {
     from
       github_my_organization
     where
-      login in ${local.benchmark_all_organizations};
+      login in ${local.organization_all_benchmark};
   EOT
 }
